@@ -337,6 +337,22 @@
       border: 1px solid #FECACA;
     }
 
+    /* ── Inline field errors ── */
+    .field-error {
+      display: none;
+      margin-top: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #B91C1C;
+    }
+    .field-error.visible { display: block; }
+    .status-text-wrap .field-error { margin-top: 4px; }
+    input.input-error,
+    input.input-error:focus {
+      border-color: #EF4444;
+      box-shadow: 0 0 0 3px rgba(239,68,68,.12);
+    }
+
     /* ── Notice ── */
     .notice {
       max-width: 640px;
@@ -345,7 +361,7 @@
       border: 1.5px solid var(--saffron-border);
       border-radius: var(--radius-sm);
       padding: 12px 18px;
-      font-size: 13.5px;
+      font-size: 17.5px;
       color: var(--text-secondary);
       text-align: center;
     }
@@ -386,7 +402,9 @@
     <p class="banner-subtitle">A free reading and knowledge contest based on the life and teachings of Srila Prabhupada.</p>
     <div class="banner-tagline">One person can change the world — discover your potential.</div>
   </div>
-
+  <div class="notice">
+    📖 Please visit <a href="https://www.sresthacontest.com/booklet.html" target="_blank" rel="noopener noreferrer">www.sresthacontest.com/booklet.html</a> to get your booklet.
+  </div>
   <!-- Form card -->
   <div class="card">
     <form id="regForm" novalidate>
@@ -396,11 +414,13 @@
       <div class="field">
         <label for="name">Full Name <span class="req">*</span></label>
         <input type="text" id="name" name="name" placeholder="Your full name" required />
+        <span class="field-error" id="err-name">Please enter your full name.</span>
       </div>
 
       <div class="field">
         <label for="whatsapp">WhatsApp Number <span class="req">*</span></label>
         <input type="tel" id="whatsapp" name="whatsapp" placeholder="+91 98765 43210" required />
+        <span class="field-error" id="err-whatsapp">Please enter your WhatsApp number.</span>
       </div>
 
       <hr class="divider" />
@@ -418,6 +438,7 @@
             </label>
             <div class="status-text-wrap" id="wrap-school">
               <input type="text" name="statusDetailSchool" placeholder="School name" />
+              <span class="field-error" id="err-school">Please enter your school name.</span>
             </div>
           </div>
 
@@ -429,6 +450,7 @@
             </label>
             <div class="status-text-wrap" id="wrap-college">
               <input type="text" name="statusDetailCollege" placeholder="College name" />
+              <span class="field-error" id="err-college">Please enter your college name.</span>
             </div>
           </div>
 
@@ -451,6 +473,7 @@
             </label>
           </div>
 
+          <span class="field-error" id="err-status">Please select your current status.</span>
         </div>
       </div>
 
@@ -473,6 +496,7 @@
             Prefer not to say
           </label>
         </div>
+        <span class="field-error" id="err-gender">Please select your gender.</span>
       </div>
 
       <div class="field">
@@ -489,6 +513,7 @@
             17+
           </label>
         </div>
+        <span class="field-error" id="err-ageGroup">Please select your age group.</span>
       </div>
 
       <div class="field">
@@ -518,9 +543,7 @@
     </form>
   </div>
 
-  <div class="notice">
-    📖 Please visit <a href="https://www.sresthacontest.com/booklet.html" target="_blank" rel="noopener noreferrer">www.sresthacontest.com/booklet.html</a> to get your booklet.
-  </div>
+
 
   <p class="footer-note">Your information is kept private and used only for contest administration.</p>
 
@@ -558,8 +581,29 @@
     // Init: hide all text fields until a radio is chosen
     updateStatusFields(null);
     form.querySelectorAll('input[name="status"]').forEach(radio => {
-      radio.addEventListener('change', () => updateStatusFields(radio.value));
+      radio.addEventListener('change', () => { updateStatusFields(radio.value); fieldErr('err-status', false, null); });
     });
+
+    // Clear inline errors on user input
+    form.name.addEventListener('input', () => fieldErr('err-name', false, form.name));
+    form.whatsapp.addEventListener('input', () => fieldErr('err-whatsapp', false, form.whatsapp));
+    document.querySelector('input[name="statusDetailSchool"]').addEventListener('input', function() { fieldErr('err-school', false, this); });
+    document.querySelector('input[name="statusDetailCollege"]').addEventListener('input', function() { fieldErr('err-college', false, this); });
+    form.querySelectorAll('input[name="gender"]').forEach(r => r.addEventListener('change', () => fieldErr('err-gender', false, null)));
+    form.querySelectorAll('input[name="ageGroup"]').forEach(r => r.addEventListener('change', () => fieldErr('err-ageGroup', false, null)));
+
+    // Inline error helpers
+    function fieldErr(id, visible, inputEl) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.toggle('visible', visible);
+      if (inputEl) inputEl.classList.toggle('input-error', visible);
+    }
+    function clearAllErrors() {
+      document.querySelectorAll('.field-error').forEach(el => el.classList.remove('visible'));
+      document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+      toast.className = '';
+    }
 
     function showToast(msg, type) {
       toast.textContent = msg;
@@ -574,33 +618,39 @@
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      toast.className = '';
+      clearAllErrors();
 
-      // --- Validate required radio groups ---
       const status   = form.querySelector('input[name="status"]:checked');
       const gender   = form.querySelector('input[name="gender"]:checked');
       const ageGroup = form.querySelector('input[name="ageGroup"]:checked');
 
+      let hasError = false;
+
       if (!form.name.value.trim()) {
-        showToast('Please enter your full name.', 'error');
-        form.name.focus(); return;
+        fieldErr('err-name', true, form.name); hasError = true;
       }
       if (!form.whatsapp.value.trim()) {
-        showToast('Please enter your WhatsApp number.', 'error');
-        form.whatsapp.focus(); return;
+        fieldErr('err-whatsapp', true, form.whatsapp); hasError = true;
       }
       if (!status) {
-        showToast('Please select your current status.', 'error'); return;
+        fieldErr('err-status', true, null); hasError = true;
       }
-      const statusDetail = status.value !== 'Other'
-        ? (statusWraps[status.value].querySelector('input').value.trim())
+
+      // School and College text fields are required
+      const requiresDetail = status && (status.value === 'School' || status.value === 'College');
+      const statusDetail = (status && statusWraps[status.value])
+        ? statusWraps[status.value].querySelector('input').value.trim()
         : '';
-      if (!gender) {
-        showToast('Please select your gender.', 'error'); return;
+      if (requiresDetail && !statusDetail) {
+        const errId = status.value === 'School' ? 'err-school' : 'err-college';
+        const inp   = statusWraps[status.value].querySelector('input');
+        fieldErr(errId, true, inp); hasError = true;
       }
-      if (!ageGroup) {
-        showToast('Please select your age group.', 'error'); return;
-      }
+
+      if (!gender)   { fieldErr('err-gender',   true, null); hasError = true; }
+      if (!ageGroup) { fieldErr('err-ageGroup',  true, null); hasError = true; }
+
+      if (hasError) return;
 
       const language = form.querySelector('input[name="language"]:checked');
 
