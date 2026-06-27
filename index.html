@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ŚREṢṬHA Contest — Registration</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --saffron: #E8660A;
+      --saffron-light: #F97316;
+      --saffron-pale: #FFF7ED;
+      --saffron-border: #FDBA74;
+      --text-primary: #1C1917;
+      --text-secondary: #57534E;
+      --text-muted: #A8A29E;
+      --surface: #FFFFFF;
+      --surface-alt: #FAFAF9;
+      --border: #E7E5E4;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.06);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,.10);
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 40%, #FEF3C7 100%);
+      min-height: 100vh;
+      padding: 32px 16px 64px;
+      color: var(--text-primary);
+    }
+
+    /* ── Header banner ── */
+    .banner {
+      max-width: 640px;
+      margin: 0 auto 0;
+      background: var(--saffron);
+      border-radius: var(--radius) var(--radius) 0 0;
+      padding: 28px 32px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,.10) 0%, transparent 60%);
+    }
+    .banner-deco {
+      position: absolute;
+      right: -24px; top: -24px;
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.08);
+    }
+    .banner-deco2 {
+      position: absolute;
+      right: 40px; bottom: -40px;
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.06);
+    }
+    .banner-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.75);
+      margin-bottom: 6px;
+      position: relative;
+    }
+    .banner h1 {
+      font-size: clamp(26px, 6vw, 36px);
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+      position: relative;
+    }
+    .banner-subtitle {
+      margin-top: 10px;
+      font-size: 13px;
+      color: rgba(255,255,255,.88);
+      line-height: 1.55;
+      max-width: 480px;
+      position: relative;
+    }
+    .banner-tagline {
+      margin-top: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+      position: relative;
+    }
+    .banner-tagline::before { content: '✦'; font-size: 10px; opacity: .7; }
+
+    /* ── Card ── */
+    .card {
+      max-width: 640px;
+      margin: 0 auto;
+      background: var(--surface);
+      border-radius: 0 0 var(--radius) var(--radius);
+      box-shadow: var(--shadow-lg);
+      padding: 32px 32px 36px;
+    }
+
+    /* ── Section heading ── */
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--saffron);
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1.5px solid var(--saffron-border);
+    }
+
+    /* ── Field group ── */
+    .field {
+      margin-bottom: 22px;
+    }
+    .field label {
+      display: block;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 7px;
+    }
+    .field label .req {
+      color: var(--saffron);
+      margin-left: 2px;
+    }
+    .field label .opt {
+      font-weight: 400;
+      color: var(--text-muted);
+      font-size: 12px;
+      margin-left: 4px;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"] {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 14.5px;
+      color: var(--text-primary);
+      background: var(--surface);
+      transition: border-color .18s, box-shadow .18s;
+      outline: none;
+      font-family: inherit;
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="tel"]:focus {
+      border-color: var(--saffron-light);
+      box-shadow: 0 0 0 3px rgba(249,115,22,.12);
+    }
+    input[type="text"]::placeholder,
+    input[type="email"]::placeholder,
+    input[type="tel"]::placeholder {
+      color: var(--text-muted);
+    }
+
+    /* ── Status options ── */
+    .status-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .status-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .status-option > label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      background: var(--surface-alt);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 9px 16px;
+      transition: border-color .15s, background .15s, color .15s;
+      user-select: none;
+      white-space: nowrap;
+      min-width: 120px;
+    }
+    .status-option > label:has(input[type="radio"]:checked) {
+      border-color: var(--saffron-light);
+      background: var(--saffron-pale);
+      color: var(--saffron);
+      font-weight: 600;
+    }
+    .status-option input[type="radio"] { display: none; }
+    .status-text-wrap {
+      flex: 1;
+      min-width: 180px;
+    }
+    .status-text-wrap input[type="text"] {
+      padding: 9px 12px;
+      font-size: 13.5px;
+    }
+
+    /* ── Radio group ── */
+    .radio-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .radio-group label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      background: var(--surface-alt);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 9px 16px;
+      transition: border-color .15s, background .15s, color .15s;
+      user-select: none;
+    }
+    .radio-group input[type="radio"] { display: none; }
+    .radio-group input[type="radio"]:checked + span,
+    .radio-group label:has(input[type="radio"]:checked) {
+      border-color: var(--saffron-light);
+      background: var(--saffron-pale);
+      color: var(--saffron);
+      font-weight: 600;
+    }
+    .radio-group label:has(input[type="radio"]:checked) {
+      border-color: var(--saffron-light);
+      background: var(--saffron-pale);
+      color: var(--saffron);
+      font-weight: 600;
+    }
+    .radio-dot {
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      border: 2px solid currentColor;
+      flex-shrink: 0;
+      position: relative;
+      transition: border-color .15s;
+    }
+    .radio-group label:has(input[type="radio"]:checked) .radio-dot::after {
+      content: '';
+      position: absolute;
+      inset: 2px;
+      border-radius: 50%;
+      background: var(--saffron-light);
+    }
+
+    /* ── Divider ── */
+    .divider { margin: 28px 0; border: none; border-top: 1px solid var(--border); }
+
+    /* ── Submit button ── */
+    .submit-wrap { margin-top: 28px; }
+    button[type="submit"] {
+      width: 100%;
+      padding: 14px 24px;
+      background: var(--saffron);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      letter-spacing: 0.3px;
+      transition: background .18s, transform .12s, box-shadow .18s;
+      font-family: inherit;
+      box-shadow: 0 2px 8px rgba(232,102,10,.30);
+      position: relative;
+      overflow: hidden;
+    }
+    button[type="submit"]:hover {
+      background: #D15A08;
+      box-shadow: 0 4px 16px rgba(232,102,10,.38);
+      transform: translateY(-1px);
+    }
+    button[type="submit"]:active { transform: translateY(0); }
+    button[type="submit"]:disabled {
+      opacity: .65;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ── Spinner ── */
+    .spinner {
+      display: none;
+      width: 18px; height: 18px;
+      border: 2.5px solid rgba(255,255,255,.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      margin: 0 auto;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Toast ── */
+    #toast {
+      display: none;
+      margin-top: 16px;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13.5px;
+      font-weight: 500;
+      text-align: center;
+    }
+    #toast.success {
+      display: block;
+      background: #F0FDF4;
+      color: #15803D;
+      border: 1px solid #BBF7D0;
+    }
+    #toast.error {
+      display: block;
+      background: #FFF1F2;
+      color: #B91C1C;
+      border: 1px solid #FECACA;
+    }
+
+    /* ── Footer note ── */
+    .footer-note {
+      max-width: 640px;
+      margin: 18px auto 0;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ── Mobile ── */
+    @media (max-width: 480px) {
+      body { padding: 16px 8px 48px; }
+      .banner { padding: 22px 20px 20px; border-radius: 10px 10px 0 0; }
+      .card { padding: 24px 20px 28px; border-radius: 0 0 10px 10px; }
+      .radio-group { flex-direction: column; }
+      .radio-group label { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Banner -->
+  <div class="banner" role="banner">
+    <div class="banner-deco" aria-hidden="true"></div>
+    <div class="banner-deco2" aria-hidden="true"></div>
+    <div class="banner-label">Free Contest &mdash; Open to All</div>
+    <h1>ŚREṢṬHA Contest</h1>
+    <p class="banner-subtitle">A free reading and knowledge contest based on the life and teachings of Srila Prabhupada.</p>
+    <div class="banner-tagline">One person can change the world — discover your potential.</div>
+  </div>
+
+  <!-- Form card -->
+  <div class="card">
+    <form id="regForm" novalidate>
+
+      <div class="section-title">Personal Details</div>
+
+      <div class="field">
+        <label for="email">Email <span class="req">*</span></label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required />
+      </div>
+
+      <div class="field">
+        <label for="name">Full Name <span class="req">*</span></label>
+        <input type="text" id="name" name="name" placeholder="Your full name" required />
+      </div>
+
+      <div class="field">
+        <label for="whatsapp">WhatsApp Number <span class="req">*</span></label>
+        <input type="tel" id="whatsapp" name="whatsapp" placeholder="+91 98765 43210" required />
+      </div>
+
+      <hr class="divider" />
+      <div class="section-title">About You</div>
+
+      <div class="field">
+        <label>Current Status <span class="req">*</span></label>
+        <div class="status-group" role="radiogroup" aria-label="Current Status">
+
+          <div class="status-option">
+            <label>
+              <input type="radio" name="status" value="School" required />
+              <div class="radio-dot"></div>
+              School
+            </label>
+            <div class="status-text-wrap" id="wrap-school">
+              <input type="text" name="statusDetailSchool" placeholder="School name" />
+            </div>
+          </div>
+
+          <div class="status-option">
+            <label>
+              <input type="radio" name="status" value="College" />
+              <div class="radio-dot"></div>
+              College
+            </label>
+            <div class="status-text-wrap" id="wrap-college">
+              <input type="text" name="statusDetailCollege" placeholder="College name" />
+            </div>
+          </div>
+
+          <div class="status-option">
+            <label>
+              <input type="radio" name="status" value="Company" />
+              <div class="radio-dot"></div>
+              Working
+            </label>
+            <div class="status-text-wrap" id="wrap-company">
+              <input type="text" name="statusDetailCompany" placeholder="Company name" />
+            </div>
+          </div>
+
+          <div class="status-option">
+            <label>
+              <input type="radio" name="status" value="Other" />
+              <div class="radio-dot"></div>
+              Other
+            </label>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Gender <span class="req">*</span></label>
+        <div class="radio-group" role="radiogroup" aria-label="Gender">
+          <label>
+            <input type="radio" name="gender" value="Male" required />
+            <div class="radio-dot"></div>
+            Male
+          </label>
+          <label>
+            <input type="radio" name="gender" value="Female" />
+            <div class="radio-dot"></div>
+            Female
+          </label>
+          <label>
+            <input type="radio" name="gender" value="Prefer not to say" />
+            <div class="radio-dot"></div>
+            Prefer not to say
+          </label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Age Group <span class="req">*</span></label>
+        <div class="radio-group" role="radiogroup" aria-label="Age Group">
+          <label>
+            <input type="radio" name="ageGroup" value="8-16" required />
+            <div class="radio-dot"></div>
+            8–16
+          </label>
+          <label>
+            <input type="radio" name="ageGroup" value="17+" />
+            <div class="radio-dot"></div>
+            17+
+          </label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Language <span class="req">*</span></label>
+        <div class="radio-group" role="radiogroup" aria-label="Language">
+          <label>
+            <input type="radio" name="language" value="English" />
+            <div class="radio-dot"></div>
+            English
+          </label>
+          <label>
+            <input type="radio" name="language" value="Telugu" />
+            <div class="radio-dot"></div>
+            Telugu
+          </label>
+        </div>
+      </div>
+
+      <div class="submit-wrap">
+        <button type="submit" id="submitBtn">
+          <span id="btnText">Register Now</span>
+          <div class="spinner" id="spinner"></div>
+        </button>
+        <div id="toast"></div>
+      </div>
+
+    </form>
+  </div>
+
+  <p class="footer-note">Your information is kept private and used only for contest administration.</p>
+
+  <script>
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz5040FttMdqQhjvls5JaloDNI1oAalrTuApk0pObsVg76MVM3mdpZzh2GXOOylHNI92A/exec';
+
+    const REDIRECT = {
+      '8-16': 'https://chat.whatsapp.com/H6M3U8xT8CK8bhYeUjWudH',
+      '17+':  'https://chat.whatsapp.com/FKvLgNuNE2O58CxUaGPPZU',
+    };
+
+    const form      = document.getElementById('regForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const spinner   = document.getElementById('spinner');
+    const btnText   = document.getElementById('btnText');
+    const toast     = document.getElementById('toast');
+
+    // Show/hide status text fields based on selection
+    const statusWraps = {
+      School:  document.getElementById('wrap-school'),
+      College: document.getElementById('wrap-college'),
+      Company: document.getElementById('wrap-company'),
+    };
+    function updateStatusFields(selected) {
+      Object.entries(statusWraps).forEach(([val, wrap]) => {
+        const input = wrap.querySelector('input');
+        if (val === selected) {
+          wrap.style.display = '';
+        } else {
+          wrap.style.display = 'none';
+          input.value = '';
+        }
+      });
+    }
+    // Init: hide all text fields until a radio is chosen
+    updateStatusFields(null);
+    form.querySelectorAll('input[name="status"]').forEach(radio => {
+      radio.addEventListener('change', () => updateStatusFields(radio.value));
+    });
+
+    function showToast(msg, type) {
+      toast.textContent = msg;
+      toast.className = type;
+    }
+
+    function setLoading(on) {
+      submitBtn.disabled = on;
+      btnText.style.display = on ? 'none' : 'inline';
+      spinner.style.display  = on ? 'block' : 'none';
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      toast.className = '';
+
+      // --- Validate required radio groups ---
+      const status   = form.querySelector('input[name="status"]:checked');
+      const gender   = form.querySelector('input[name="gender"]:checked');
+      const ageGroup = form.querySelector('input[name="ageGroup"]:checked');
+
+      if (!form.email.value.trim()) {
+        showToast('Please enter your email address.', 'error');
+        form.email.focus(); return;
+      }
+      if (!form.name.value.trim()) {
+        showToast('Please enter your full name.', 'error');
+        form.name.focus(); return;
+      }
+      if (!form.whatsapp.value.trim()) {
+        showToast('Please enter your WhatsApp number.', 'error');
+        form.whatsapp.focus(); return;
+      }
+      if (!status) {
+        showToast('Please select your current status.', 'error'); return;
+      }
+      const statusDetail = status.value !== 'Other'
+        ? (statusWraps[status.value].querySelector('input').value.trim())
+        : '';
+      if (status.value !== 'Other' && !statusDetail) {
+        showToast(`Please enter your ${status.value.toLowerCase()} name.`, 'error');
+        statusWraps[status.value].querySelector('input').focus(); return;
+      }
+      if (!gender) {
+        showToast('Please select your gender.', 'error'); return;
+      }
+      if (!ageGroup) {
+        showToast('Please select your age group.', 'error'); return;
+      }
+
+      const language = form.querySelector('input[name="language"]:checked');
+      if (!language) {
+        showToast('Please select your preferred language.', 'error'); return;
+      }
+
+      const payload = {
+        email:        form.email.value.trim(),
+        name:         form.name.value.trim(),
+        whatsapp:     form.whatsapp.value.trim(),
+        status:       status.value,
+        statusDetail: statusDetail,
+        gender:       gender.value,
+        ageGroup:     ageGroup.value,
+        language:     language ? language.value : '',
+        timestamp:    new Date().toISOString(),
+      };
+
+      setLoading(true);
+
+      try {
+        // Fire-and-forget POST to Apps Script (no-cors keeps it simple)
+        fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        }).catch(() => {}); // ignore network errors — redirect still happens
+
+        // Brief delay so the request can leave before navigation
+        await new Promise(r => setTimeout(r, 600));
+
+        showToast('Registered! Redirecting to WhatsApp group…', 'success');
+        await new Promise(r => setTimeout(r, 900));
+
+        window.location.href = REDIRECT[ageGroup.value];
+      } catch (err) {
+        setLoading(false);
+        showToast('Something went wrong. Please try again.', 'error');
+      }
+    });
+  </script>
+</body>
+</html>
