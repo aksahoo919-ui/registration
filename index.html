@@ -352,6 +352,17 @@
       border-color: #EF4444;
       box-shadow: 0 0 0 3px rgba(239,68,68,.12);
     }
+    .summary-error {
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      padding: 10px 14px;
+      background: #FFF1F2;
+      border: 1px solid #FECACA;
+      border-radius: var(--radius-sm);
+    }
 
     /* ── Notice ── */
     .notice {
@@ -382,12 +393,55 @@
     }
 
     /* ── Mobile ── */
-    @media (max-width: 480px) {
-      body { padding: 16px 8px 48px; }
-      .banner { padding: 22px 20px 20px; border-radius: 10px 10px 0 0; }
-      .card { padding: 24px 20px 28px; border-radius: 0 0 10px 10px; }
-      .radio-group { flex-direction: column; }
-      .radio-group label { width: 100%; }
+    @media (max-width: 520px) {
+      body { padding: 0 0 48px; }
+
+      /* Banner: flush to edges, no border-radius at top */
+      .banner {
+        border-radius: 0;
+        padding: 22px 18px 20px;
+      }
+
+      /* Card: flush to edges */
+      .card {
+        border-radius: 0;
+        padding: 22px 16px 28px;
+        box-shadow: none;
+      }
+
+      /* Notice: flush */
+      .notice {
+        border-radius: 0;
+        margin-top: 0;
+        font-size: 13.5px;
+        padding: 11px 16px;
+      }
+
+      /* Footer */
+      .footer-note { padding: 0 16px; }
+
+      /* Inputs: slightly larger tap target */
+      input[type="text"],
+      input[type="email"],
+      input[type="tel"] {
+        font-size: 16px; /* prevents iOS zoom-in on focus */
+        padding: 13px 14px;
+      }
+
+      /* Radio pills: full width, stacked */
+      .radio-group { flex-direction: column; gap: 8px; }
+      .radio-group label { width: 100%; padding: 12px 16px; font-size: 15px; }
+
+      /* Status options: stack pill above text field */
+      .status-option { flex-direction: column; align-items: stretch; gap: 6px; }
+      .status-option > label { min-width: unset; width: 100%; font-size: 15px; padding: 12px 16px; }
+      .status-text-wrap { min-width: unset; width: 100%; }
+
+      /* Button: bigger tap target */
+      button[type="submit"] { padding: 16px 24px; font-size: 16px; }
+
+      /* Banner tagline: wrap gracefully */
+      .banner-tagline { font-size: 11px; }
     }
   </style>
 </head>
@@ -419,8 +473,8 @@
 
       <div class="field">
         <label for="whatsapp">WhatsApp Number <span class="req">*</span></label>
-        <input type="tel" id="whatsapp" name="whatsapp" placeholder="+91 98765 43210" required />
-        <span class="field-error" id="err-whatsapp">Please enter your WhatsApp number.</span>
+        <input type="tel" id="whatsapp" name="whatsapp" placeholder="9876543210" required />
+        <span class="field-error" id="err-whatsapp">Please enter a valid 10-digit WhatsApp number.</span>
       </div>
 
       <hr class="divider" />
@@ -533,6 +587,7 @@
       </div>
 
       <div class="submit-wrap">
+        <div class="field-error summary-error" id="err-summary">Please fill in all the required details above.</div>
         <button type="submit" id="submitBtn">
           <span id="btnText">Register Now</span>
           <div class="spinner" id="spinner"></div>
@@ -586,11 +641,15 @@
 
     // Clear inline errors on user input
     form.name.addEventListener('input', () => fieldErr('err-name', false, form.name));
-    form.whatsapp.addEventListener('input', () => fieldErr('err-whatsapp', false, form.whatsapp));
+    form.whatsapp.addEventListener('input', () => { fieldErr('err-whatsapp', false, form.whatsapp); fieldErr('err-summary', false, null); });
+    form.name.addEventListener('input', () => fieldErr('err-summary', false, null), { once: false });
     document.querySelector('input[name="statusDetailSchool"]').addEventListener('input', function() { fieldErr('err-school', false, this); });
     document.querySelector('input[name="statusDetailCollege"]').addEventListener('input', function() { fieldErr('err-college', false, this); });
-    form.querySelectorAll('input[name="gender"]').forEach(r => r.addEventListener('change', () => fieldErr('err-gender', false, null)));
-    form.querySelectorAll('input[name="ageGroup"]').forEach(r => r.addEventListener('change', () => fieldErr('err-ageGroup', false, null)));
+    form.querySelectorAll('input[name="gender"]').forEach(r => r.addEventListener('change', () => { fieldErr('err-gender', false, null); fieldErr('err-summary', false, null); }));
+    form.querySelectorAll('input[name="ageGroup"]').forEach(r => r.addEventListener('change', () => { fieldErr('err-ageGroup', false, null); fieldErr('err-summary', false, null); }));
+    form.querySelectorAll('input[name="status"]').forEach(r => r.addEventListener('change', () => fieldErr('err-summary', false, null)));
+    document.querySelector('input[name="statusDetailSchool"]').addEventListener('input', () => fieldErr('err-summary', false, null));
+    document.querySelector('input[name="statusDetailCollege"]').addEventListener('input', () => fieldErr('err-summary', false, null));
 
     // Inline error helpers
     function fieldErr(id, visible, inputEl) {
@@ -629,7 +688,8 @@
       if (!form.name.value.trim()) {
         fieldErr('err-name', true, form.name); hasError = true;
       }
-      if (!form.whatsapp.value.trim()) {
+      const waVal = form.whatsapp.value.trim().replace(/\s+/g, '');
+      if (!waVal || !/^\d{10}$/.test(waVal)) {
         fieldErr('err-whatsapp', true, form.whatsapp); hasError = true;
       }
       if (!status) {
@@ -650,7 +710,7 @@
       if (!gender)   { fieldErr('err-gender',   true, null); hasError = true; }
       if (!ageGroup) { fieldErr('err-ageGroup',  true, null); hasError = true; }
 
-      if (hasError) return;
+      if (hasError) { fieldErr('err-summary', true, null); return; }
 
       const language = form.querySelector('input[name="language"]:checked');
 
