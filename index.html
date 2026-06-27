@@ -723,7 +723,7 @@
         gender:       gender.value,
         ageGroup:     ageGroup.value,
         language:     language ? language.value : '',
-        timestamp:    new Date().toISOString(),
+        timestamp:    new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
       };
 
       setLoading(true);
