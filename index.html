@@ -375,11 +375,6 @@
       <div class="section-title">Personal Details</div>
 
       <div class="field">
-        <label for="email">Email <span class="req">*</span></label>
-        <input type="email" id="email" name="email" placeholder="you@example.com" required />
-      </div>
-
-      <div class="field">
         <label for="name">Full Name <span class="req">*</span></label>
         <input type="text" id="name" name="name" placeholder="Your full name" required />
       </div>
@@ -478,7 +473,7 @@
       </div>
 
       <div class="field">
-        <label>Language <span class="req">*</span></label>
+        <label>Language <span class="opt">(optional)</span></label>
         <div class="radio-group" role="radiogroup" aria-label="Language">
           <label>
             <input type="radio" name="language" value="English" />
@@ -563,10 +558,6 @@
       const gender   = form.querySelector('input[name="gender"]:checked');
       const ageGroup = form.querySelector('input[name="ageGroup"]:checked');
 
-      if (!form.email.value.trim()) {
-        showToast('Please enter your email address.', 'error');
-        form.email.focus(); return;
-      }
       if (!form.name.value.trim()) {
         showToast('Please enter your full name.', 'error');
         form.name.focus(); return;
@@ -581,10 +572,6 @@
       const statusDetail = status.value !== 'Other'
         ? (statusWraps[status.value].querySelector('input').value.trim())
         : '';
-      if (status.value !== 'Other' && !statusDetail) {
-        showToast(`Please enter your ${status.value.toLowerCase()} name.`, 'error');
-        statusWraps[status.value].querySelector('input').focus(); return;
-      }
       if (!gender) {
         showToast('Please select your gender.', 'error'); return;
       }
@@ -593,12 +580,8 @@
       }
 
       const language = form.querySelector('input[name="language"]:checked');
-      if (!language) {
-        showToast('Please select your preferred language.', 'error'); return;
-      }
 
       const payload = {
-        email:        form.email.value.trim(),
         name:         form.name.value.trim(),
         whatsapp:     form.whatsapp.value.trim(),
         status:       status.value,
