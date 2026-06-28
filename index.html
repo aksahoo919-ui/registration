@@ -172,47 +172,11 @@
       color: var(--text-muted);
     }
 
-    /* ── Status options ── */
-    .status-group {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+    /* ── Status detail text input (shown below pills when needed) ── */
+    .status-detail-wrap {
+      margin-top: 10px;
     }
-    .status-option {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .status-option > label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 400;
-      color: var(--text-secondary);
-      background: var(--surface-alt);
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 9px 16px;
-      transition: border-color .15s, background .15s, color .15s;
-      user-select: none;
-      white-space: nowrap;
-      min-width: 120px;
-    }
-    .status-option > label:has(input[type="radio"]:checked) {
-      border-color: var(--saffron-light);
-      background: var(--saffron-pale);
-      color: var(--saffron);
-      font-weight: 600;
-    }
-    .status-option input[type="radio"] { display: none; }
-    .status-text-wrap {
-      flex: 1;
-      min-width: 180px;
-    }
-    .status-text-wrap input[type="text"] {
+    .status-detail-wrap input[type="text"] {
       padding: 9px 12px;
       font-size: 13.5px;
     }
@@ -432,10 +396,8 @@
       .radio-group { flex-direction: column; gap: 8px; }
       .radio-group label { width: 100%; padding: 12px 16px; font-size: 15px; }
 
-      /* Status options: stack pill above text field */
-      .status-option { flex-direction: column; align-items: stretch; gap: 6px; }
-      .status-option > label { min-width: unset; width: 100%; font-size: 15px; padding: 12px 16px; }
-      .status-text-wrap { min-width: unset; width: 100%; }
+      /* Status detail input: full width on mobile */
+      .status-detail-wrap input[type="text"] { font-size: 16px; padding: 13px 14px; }
 
       /* Button: bigger tap target */
       button[type="submit"] { padding: 16px 24px; font-size: 16px; }
@@ -480,53 +442,40 @@
 
       <div class="field">
         <label>Current Status <span class="req">*</span></label>
-        <div class="status-group" role="radiogroup" aria-label="Current Status">
-
-          <div class="status-option">
-            <label>
-              <input type="radio" name="status" value="School" required />
-              <div class="radio-dot"></div>
-              School
-            </label>
-            <div class="status-text-wrap" id="wrap-school">
-              <input type="text" name="statusDetailSchool" placeholder="School name" />
-              <span class="field-error" id="err-school">Please enter your school name.</span>
-            </div>
-          </div>
-
-          <div class="status-option">
-            <label>
-              <input type="radio" name="status" value="College" />
-              <div class="radio-dot"></div>
-              College
-            </label>
-            <div class="status-text-wrap" id="wrap-college">
-              <input type="text" name="statusDetailCollege" placeholder="College name" />
-              <span class="field-error" id="err-college">Please enter your college name.</span>
-            </div>
-          </div>
-
-          <div class="status-option">
-            <label>
-              <input type="radio" name="status" value="Company" />
-              <div class="radio-dot"></div>
-              Working
-            </label>
-            <div class="status-text-wrap" id="wrap-company">
-              <input type="text" name="statusDetailCompany" placeholder="Company name" />
-            </div>
-          </div>
-
-          <div class="status-option">
-            <label>
-              <input type="radio" name="status" value="Other" />
-              <div class="radio-dot"></div>
-              Other
-            </label>
-          </div>
-
-          <span class="field-error" id="err-status">Please select your current status.</span>
+        <div class="radio-group" role="radiogroup" aria-label="Current Status">
+          <label>
+            <input type="radio" name="status" value="School" required />
+            <div class="radio-dot"></div>
+            School
+          </label>
+          <label>
+            <input type="radio" name="status" value="College" />
+            <div class="radio-dot"></div>
+            College
+          </label>
+          <label>
+            <input type="radio" name="status" value="Company" />
+            <div class="radio-dot"></div>
+            Working
+          </label>
+          <label>
+            <input type="radio" name="status" value="Other" />
+            <div class="radio-dot"></div>
+            Other
+          </label>
         </div>
+        <div class="status-detail-wrap" id="wrap-school" style="display:none">
+          <input type="text" name="statusDetailSchool" placeholder="School name" />
+          <span class="field-error" id="err-school">Please enter your school name.</span>
+        </div>
+        <div class="status-detail-wrap" id="wrap-college" style="display:none">
+          <input type="text" name="statusDetailCollege" placeholder="College name" />
+          <span class="field-error" id="err-college">Please enter your college name.</span>
+        </div>
+        <div class="status-detail-wrap" id="wrap-company" style="display:none">
+          <input type="text" name="statusDetailCompany" placeholder="Company name" />
+        </div>
+        <span class="field-error" id="err-status">Please select your current status.</span>
       </div>
 
       <div class="field">
@@ -606,7 +555,7 @@
   <script>
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz5040FttMdqQhjvls5JaloDNI1oAalrTuApk0pObsVg76MVM3mdpZzh2GXOOylHNI92A/exec';
 
-    const REDIRECT = {
+    const WHATSAPP_LINKS = {
       '8-16': 'https://chat.whatsapp.com/H6M3U8xT8CK8bhYeUjWudH',
       '17+':  'https://chat.whatsapp.com/FKvLgNuNE2O58CxUaGPPZU',
     };
@@ -634,23 +583,18 @@
         }
       });
     }
-    // Init: hide all text fields until a radio is chosen
-    updateStatusFields(null);
     form.querySelectorAll('input[name="status"]').forEach(radio => {
       radio.addEventListener('change', () => { updateStatusFields(radio.value); fieldErr('err-status', false, null); });
     });
 
     // Clear inline errors on user input
-    form.name.addEventListener('input', () => fieldErr('err-name', false, form.name));
+    form.name.addEventListener('input', () => { fieldErr('err-name', false, form.name); fieldErr('err-summary', false, null); });
     form.whatsapp.addEventListener('input', () => { fieldErr('err-whatsapp', false, form.whatsapp); fieldErr('err-summary', false, null); });
-    form.name.addEventListener('input', () => fieldErr('err-summary', false, null), { once: false });
-    document.querySelector('input[name="statusDetailSchool"]').addEventListener('input', function() { fieldErr('err-school', false, this); });
-    document.querySelector('input[name="statusDetailCollege"]').addEventListener('input', function() { fieldErr('err-college', false, this); });
+    document.querySelector('input[name="statusDetailSchool"]').addEventListener('input', function() { fieldErr('err-school', false, this); fieldErr('err-summary', false, null); });
+    document.querySelector('input[name="statusDetailCollege"]').addEventListener('input', function() { fieldErr('err-college', false, this); fieldErr('err-summary', false, null); });
     form.querySelectorAll('input[name="gender"]').forEach(r => r.addEventListener('change', () => { fieldErr('err-gender', false, null); fieldErr('err-summary', false, null); }));
     form.querySelectorAll('input[name="ageGroup"]').forEach(r => r.addEventListener('change', () => { fieldErr('err-ageGroup', false, null); fieldErr('err-summary', false, null); }));
     form.querySelectorAll('input[name="status"]').forEach(r => r.addEventListener('change', () => fieldErr('err-summary', false, null)));
-    document.querySelector('input[name="statusDetailSchool"]').addEventListener('input', () => fieldErr('err-summary', false, null));
-    document.querySelector('input[name="statusDetailCollege"]').addEventListener('input', () => fieldErr('err-summary', false, null));
 
     // Inline error helpers
     function fieldErr(id, visible, inputEl) {
@@ -676,6 +620,24 @@
       spinner.style.display  = on ? 'block' : 'none';
     }
 
+    function showSuccess(name, waLink) {
+      const card = document.querySelector('.card');
+      card.innerHTML = `
+        <div style="text-align:center;padding:32px 16px 24px">
+          <div style="width:72px;height:72px;border-radius:50%;background:#F0FDF4;border:2px solid #BBF7D0;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:36px;">✓</div>
+          <h2 style="font-size:22px;font-weight:800;color:var(--text-primary);margin-bottom:8px;">You're Registered!</h2>
+          <p style="font-size:14px;color:var(--text-secondary);line-height:1.6;max-width:380px;margin:0 auto 28px;">
+            Welcome, <strong>${name}</strong>! Your registration for the ŚREṢṬHA Contest is confirmed.
+          </p>
+          <a href="${waLink}" target="_blank" rel="noopener noreferrer"
+            style="display:inline-flex;align-items:center;gap:8px;background:#25D366;color:#fff;font-size:15px;font-weight:700;padding:13px 28px;border-radius:8px;text-decoration:none;box-shadow:0 2px 8px rgba(37,211,102,.30);">
+            Join WhatsApp Group →
+          </a>
+          <p style="margin-top:20px;font-size:12px;color:var(--text-muted);">Click the button above to join your age group's WhatsApp group.</p>
+        </div>
+      `;
+    }
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       clearAllErrors();
@@ -697,7 +659,6 @@
         fieldErr('err-status', true, null); hasError = true;
       }
 
-      // School and College text fields are required
       const requiresDetail = status && (status.value === 'School' || status.value === 'College');
       const statusDetail = (status && statusWraps[status.value])
         ? statusWraps[status.value].querySelector('input').value.trim()
@@ -714,9 +675,10 @@
       if (hasError) { fieldErr('err-summary', true, null); return; }
 
       const language = form.querySelector('input[name="language"]:checked');
+      const registrantName = form.name.value.trim();
 
       const payload = {
-        name:         form.name.value.trim(),
+        name:         registrantName,
         whatsapp:     form.whatsapp.value.trim(),
         status:       status.value,
         statusDetail: statusDetail,
@@ -729,21 +691,18 @@
       setLoading(true);
 
       try {
-        // Fire-and-forget POST to Apps Script (no-cors keeps it simple)
         fetch(APPS_SCRIPT_URL, {
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
-        }).catch(() => {}); // ignore network errors — redirect still happens
+        }).catch(() => {});
 
-        // Brief delay so the request can leave before navigation
         await new Promise(r => setTimeout(r, 600));
-
-        showToast('Registered! Redirecting to WhatsApp group…', 'success');
-        await new Promise(r => setTimeout(r, 900));
-
-        window.location.href = REDIRECT[ageGroup.value];
+        const waLink = WHATSAPP_LINKS[ageGroup.value];
+        showSuccess(registrantName, waLink);
+        await new Promise(r => setTimeout(r, 50));
+        window.location.href = waLink;
       } catch (err) {
         setLoading(false);
         showToast('Something went wrong. Please try again.', 'error');
