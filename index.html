@@ -538,6 +538,42 @@
         </div>
       </div>
 
+      <div class="field">
+        <label>How did you get to know about this contest? <span class="opt">(optional)</span></label>
+        <div class="radio-group" role="radiogroup" aria-label="How did you get to know about this contest?">
+          <label>
+            <input type="radio" name="source" value="Instagram" />
+            <div class="radio-dot"></div>
+            Instagram
+          </label>
+          <label>
+            <input type="radio" name="source" value="YouTube" />
+            <div class="radio-dot"></div>
+            YouTube
+          </label>
+          <label>
+            <input type="radio" name="source" value="WhatsApp" />
+            <div class="radio-dot"></div>
+            WhatsApp
+          </label>
+          <label>
+            <input type="radio" name="source" value="Friend" />
+            <div class="radio-dot"></div>
+            Friend
+          </label>
+          <label>
+            <input type="radio" name="source" value="Temple" />
+            <div class="radio-dot"></div>
+            Temple
+          </label>
+          <label>
+            <input type="radio" name="source" value="Others" />
+            <div class="radio-dot"></div>
+            Others
+          </label>
+        </div>
+      </div>
+
       <div class="submit-wrap">
         <div class="field-error summary-error" id="err-summary">Please fill in all the required details above.</div>
         <button type="submit" id="submitBtn">
@@ -680,6 +716,7 @@
       if (hasError) { fieldErr('err-summary', true, null); return; }
 
       const language = form.querySelector('input[name="language"]:checked');
+      const source   = form.querySelector('input[name="source"]:checked');
       const registrantName = form.name.value.trim();
 
       const payload = {
@@ -690,6 +727,7 @@
         gender:       gender.value,
         ageGroup:     ageGroup.value,
         language:     language ? language.value : '',
+        source:       source ? source.value : '',
         timestamp:    new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
       };
 
