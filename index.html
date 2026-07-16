@@ -737,14 +737,13 @@
         fetch(APPS_SCRIPT_URL, {
           method: 'POST',
           mode: 'no-cors',
+          keepalive: true,
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
         }).catch(() => {});
 
-        await new Promise(r => setTimeout(r, 2));
         const waLink = WHATSAPP_LINKS[ageGroup.value];
         showSuccess(registrantName, waLink);
-        await new Promise(r => setTimeout(r, 2));
         window.location.href = waLink;
       } catch (err) {
         setLoading(false);
